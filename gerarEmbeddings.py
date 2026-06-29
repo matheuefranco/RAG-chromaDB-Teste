@@ -7,10 +7,7 @@ import numpy as np
 import google.generativeai as generativeai
 from google import genai
 from google.genai import types
-
-
 load_dotenv()
-
 chave_secreta = os.environ.get('GEMINI_API_KEY', '')
 if not chave_secreta:
     raise ValueError("GOOGLE_API_KEY environment variable is not set. Please set it with your Gemini API key.")
@@ -22,8 +19,9 @@ collection = client.get_or_create_collection(
     name="ifsuldeminas"
 )
 
-csv_url = 'https://docs.google.com/spreadsheets/d/11QU1ibjUAlNKLwLWF1s-kSpRH2UBOiVbLyl1pJIyeSk/export?format=csv&id=11QU1ibjUAlNKLwLWF1s-kSpRH2UBOiVbLyl1pJIyeSk'
-df = pd.read_csv(csv_url)
+csv_url = 'https://docs.google.com/spreadsheets/d/1qGIdf138IMrTSZw5Rjv3_hXu7_tJw8DI/export?format=csv&id=1qGIdf138IMrTSZw5Rjv3_hXu7_tJw8DI'
+df = pd.read_csv(csv_url, encoding='utf-8')
+
 print(df.head())
 
 import google.generativeai as generativeai
@@ -42,14 +40,14 @@ def gerarEmbeddings(title, text):
 #aplicando a função para gerar os embeddings e inserir no banco
 for index, row in df.iterrows():
     embedding = gerarEmbeddings(
-        row["Titulo"],
-        row["Conteúdo"]
+        row["TITULO"],
+        row["CONTEUDO"]
     )
     collection.add(
         ids=[str(index)],
-        documents=[row["Conteúdo"]],
+        documents=[row["CONTEUDO"]],
         metadatas=[{
-            "titulo": row["Titulo"]
+            "titulo": row["TITULO"]
         }],
         embeddings=[embedding]
     )
